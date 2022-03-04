@@ -28,6 +28,9 @@ USERS=(
 	caetano
 	ozorio
 	novais
+	diogo
+	rondon
+	severiano
 )
 ###################################################################
 
