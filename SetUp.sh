@@ -128,6 +128,12 @@ mvn clean package
 mvn spring-boot:build-image
 sudo docker run -it -p 5000:8080 docker.io/library/dsvendas:0.0.1-SNAPSHOT
 cd /tmp/
+
+# FRONTEND
+git clone https://github.com/Senai-Dev-ops/Front.git
+cd Front
+sudo docker build . -t senaisuperior
+sudo docker run -d -p 80:3000 -i senaisuperior
 ###################################################################
 
 # FINISHING #######################################################
