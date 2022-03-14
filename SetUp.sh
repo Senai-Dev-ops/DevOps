@@ -10,6 +10,7 @@ PACKAGES_TO_INSTALL=(
 	virt-manager
 	openssh-server
 	htop
+	firefox
 )
 
 # Docker images
@@ -41,7 +42,7 @@ sudo apt upgrade -y
 # Installing packages
 for package in ${PACKAGES_TO_INSTALL[@]}; do
 	if ! dpkg -l | grep -q $package; then # Only install if the package isn't on the system
-		apt install $package -y
+		sudo apt install $package -y
 	else
 		echo "$package ALREADY INSTALLED"
 	fi
@@ -60,6 +61,7 @@ sudo apt-get remove --purge nodejs
 sudo apt-get remove --purge npm
 sudo rm -rf ~/.npm
 sudo rm -rf /usr/local/lib/node_modules
+sudo apt install nodejs -y
 cd /tmp/
 curl -0 -L https://npmjs.org/install.sh | sudo sh
 
