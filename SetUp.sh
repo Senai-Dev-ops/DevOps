@@ -11,6 +11,8 @@ PACKAGES_TO_INSTALL=(
 	openssh-server
 	htop
 	firefox
+	maven
+	neovim
 )
 
 # Docker images
@@ -61,7 +63,10 @@ sudo apt-get remove --purge nodejs
 sudo apt-get remove --purge npm
 sudo rm -rf ~/.npm
 sudo rm -rf /usr/local/lib/node_modules
-sudo apt install nodejs -y
+sudo apt autoremove -y
+sudo apt install nodejs npm -y
+sudo npm install -g n
+sudo n stable
 cd /tmp/
 curl -0 -L https://npmjs.org/install.sh | sudo sh
 
@@ -96,8 +101,21 @@ done
 sudo docker run --name bc-postgres --network=postgres-network -e "POSTGRES_PASSWORD=$POSTGRES_PASSWD" -p $PORT:$PORT -v /home/$USER/Desenvolvimento/PostgreSQL:/var/lib/postgresql/data -d postgres
 
 # Creating a PgAdmin container
+PA_PASSWD_LOCK=1
+while [ "$PA_PASSWD_LOCK" -eq "1" ]
+do
+	read -s -p 'Enter the PgAdmin default password: ' PGADMIN_PASSWD
+	echo
+	read -s -p 'Confirm your PgAdmin password: ' PGADMIN_PASSWD_CONFIRM
+	echo
+	if [ $PGADMIN_PASSWD == $PGADMIN_PASSWD_CONFIRM ] && [ ! $PGADMIN_PASSWD == "" ] ; then
+		echo "Passwords did match!"
+		PA_PASSWD_LOCK=0
+	else
+		echo "Invalid passwords, please retype:"
+	fi
+done
 read -p 'Enter the PgAdmin email: ' PGADMIN_EMAIL
-read -p 'Enter the PgAdmin default password: ' PGADMIN_PASSWD
 docker run --name bc-pgadmin --network=postgres-network -p 15432:80 -e "PGADMIN_DEFAULT_EMAIL=$PGADMIN_EMAIL" -e "PGADMIN_DEFAULT_PASSWORD=$PGADMIN_PASSWD" -d dpage/pgadmin4
 # URL: https://localhost:15432/	OR	http://0.0.0.0:15432/
 
@@ -105,7 +123,7 @@ docker run --name bc-pgadmin --network=postgres-network -p 15432:80 -e "PGADMIN_
 
 # BACKEND
 git clone https://github.com/Senai-Dev-ops/Back.git
-cd /Back/backend/
+cd Back/backend/
 mvn clean package
 mvn spring-boot:build-image
 sudo docker run -it -p 5000:8080 docker.io/library/dsvendas:0.0.1-SNAPSHOT
