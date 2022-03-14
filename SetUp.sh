@@ -10,15 +10,13 @@ PACKAGES_TO_INSTALL=(
 	virt-manager
 	openssh-server
 	htop
-	firefox
+	epiphany-browser
 	maven
 	neovim
 )
 
 # Docker images
 DOCKER_IMAGES=(
-	httpd
-	nginx
 	postgres
 	dpage/pgadmin4
 )
@@ -143,6 +141,3 @@ sudo apt autoremove -y
 echo "If possible, reboot the server!"
 echo "All done! Now configure the static IP."
 ###################################################################
-
-# NOTES:
-# "bc" = bootcamp
